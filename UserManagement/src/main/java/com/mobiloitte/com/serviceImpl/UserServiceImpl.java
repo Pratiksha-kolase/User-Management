@@ -72,6 +72,12 @@ public class UserServiceImpl implements UserService {
               return message;
 	}
 
+	@Override
+	public ResponseEntity<String> checkUser(String emailadd, UserDto userDto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 //	@Override
 //	public ResponseEntity<String> checkUser(String emailadd,UserDto userDto) {
