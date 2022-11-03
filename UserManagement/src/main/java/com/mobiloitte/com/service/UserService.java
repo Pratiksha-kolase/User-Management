@@ -19,20 +19,9 @@ public interface UserService {
 
 	Optional<UserModel> getByUsername(String username);
 
-	ResponseEntity<String> update(Long user_id,UserDto userDto);
+	ResponseEntity<String> update(Long user_id, UserDto userDto);
 
-	ResponseEntity<String> checkUser(String emailadd, UserDto userDto);
+	Optional<UserModel> getByLastname(String lastname);
 
-
-
-
-
-
-	
-
-	
-
-	
-
-
+	Optional<UserModel> getByFirstname(String firstname);
 }

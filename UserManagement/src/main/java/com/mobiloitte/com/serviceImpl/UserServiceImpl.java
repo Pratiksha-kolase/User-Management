@@ -25,17 +25,48 @@ public class UserServiceImpl implements UserService {
 	public ResponseEntity<String> insert(UserDto userDto) {
 		UserModel userModel = new UserModel();
 
-		userModel.setFirstname(userDto.getFirstname());
-		userModel.setLastname(userDto.getLastname());
-		userModel.setUserdob(userDto.getUserdob());
-		userModel.setEmailadd(userDto.getEmailadd());
-		userModel.setFirstname(userDto.getFirstname());
-		userModel.setLastname(userDto.getLastname());
-		userModel.setMobnumber(userDto.getMobnumber());
-		userModel.setPassword(userDto.getPassword());
-		userModel.setUsername(userDto.getUsername());
-		userDao.save(userModel);
-		return new ResponseEntity<>("Successfully Registered", HttpStatus.OK);
+		Optional<UserModel> firstname = userDao.findByFirstname(userDto.getFirstname());
+		Optional<UserModel> lastname = userDao.findByLastname(userDto.getLastname());
+		if (!firstname.isPresent() && !lastname.isPresent()) {
+
+			userModel.setFirstname(userDto.getFirstname());
+			userModel.setLastname(userDto.getLastname());
+		}
+		
+		Optional<UserModel> user=userDao.findByUsername(userDto.getUsername());
+		
+		if( !user.isPresent())
+		{
+			userModel.setUsername(userDto.getUsername());
+		}
+		else
+		{
+			return new ResponseEntity<>("Username Already Exists...",HttpStatus.OK);
+		}
+		
+		Optional<UserModel> mobile=userDao.findByMobnumber(userDto.getMobnumber());
+		if( !mobile.isPresent())
+		{
+			userModel.setMobnumber(userDto.getMobnumber());
+		}
+		else
+		{
+			return new ResponseEntity<>("Mobile number Already Exists...",HttpStatus.OK);
+		}
+
+		Optional<UserModel> email = userDao.findByEmailadd(userDto.getEmailadd());
+		if (!email.isPresent()) {
+			userModel.setUserdob(userDto.getUserdob());
+			userModel.setEmailadd(userDto.getEmailadd());
+			userModel.setPassword(userDto.getPassword());
+			userModel.setUsername(userDto.getUsername());
+			userDao.save(userModel);
+			return new ResponseEntity<>("Successfully Registered", HttpStatus.OK);
+		} else {
+
+			return new ResponseEntity<>("Email Already Registered...", HttpStatus.OK);
+		}
+		
 	}
 
 	@Override
@@ -69,31 +100,17 @@ public class UserServiceImpl implements UserService {
 
 			message = new ResponseEntity<>("Not found", HttpStatus.OK);
 		}
-              return message;
+		return message;
 	}
 
 	@Override
-	public ResponseEntity<String> checkUser(String emailadd, UserDto userDto) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<UserModel> getByFirstname(String firstname) {
+		return userDao.findByFirstname(firstname);
 	}
 
+	@Override
+	public Optional<UserModel> getByLastname(String lastname) {
+		return userDao.findByLastname(lastname);
+	}
 
-//	@Override
-//	public ResponseEntity<String> checkUser(String emailadd,UserDto userDto) {
-//
-//		Optional<UserModel> emailadd1=userDao.findByEmailadd(userDto.getEmailadd());
-//		UserModel userModel=new UserModel();
-//		if(!emailadd1.isPresent())
-//		{
-//			userModel.setEmailadd(userDto.getEmailadd());
-//			return new ResponseEntity<>("Registered",HttpStatus.OK);
-//		}
-//		else
-//		{
-//			return new ResponseEntity<>("Not Registered",HttpStatus.OK);
-//		}
-//		
-
-//}
 }

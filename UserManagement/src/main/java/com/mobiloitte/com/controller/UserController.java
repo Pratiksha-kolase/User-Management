@@ -29,10 +29,17 @@ public class UserController {
 		return userService.insert(userDto);
 	}
 
-	@GetMapping("/check/{emailadd}")
-	public ResponseEntity<String> checkUser(@PathVariable("emailadd")String emailadd,@RequestBody UserDto userDto)
-	{
-		return userService.checkUser(emailadd,userDto);
+	@GetMapping("/getbyfirstname/{firstname}")
+	public Optional<UserModel> firstname(@PathVariable("firstname") String firstname) {
+
+		return userService.getByFirstname(firstname);
+	}
+
+
+	@GetMapping("/getbylastname/{lastName}")
+	public Optional<UserModel> lastname(@PathVariable("lastname") String lastname) {
+
+		return userService.getByLastname(lastname);
 	}
 
 	@GetMapping("/getAllData")
