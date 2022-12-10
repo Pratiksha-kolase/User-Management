@@ -26,14 +26,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseEntity<String> insert(UserDto userDto) {
 		UserModel userModel = new UserModel();
-
-		Optional<UserModel> firstname = userDao.findByFirstname(userDto.getFirstname());
-		Optional<UserModel> lastname = userDao.findByLastname(userDto.getLastname());
-		if (!firstname.isPresent() && !lastname.isPresent()) {
-
-			userModel.setFirstname(userDto.getFirstname());
-			userModel.setLastname(userDto.getLastname());
-		}
 		
 		Optional<UserModel> user=userDao.findByUsername(userDto.getUsername());
 		
@@ -68,6 +60,8 @@ public class UserServiceImpl implements UserService {
 
 		Optional<UserModel> email = userDao.findByEmailadd(userDto.getEmailadd());
 		if (!email.isPresent()) {
+			userModel.setFirstname(userDto.getFirstname());
+			userModel.setLastname(userDto.getLastname());
 			userModel.setUserdob(userDto.getUserdob());
 			userModel.setEmailadd(userDto.getEmailadd());
 			userModel.setPassword(userDto.getPassword());
