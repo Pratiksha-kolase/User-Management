@@ -10,6 +10,8 @@ import com.mobiloitte.com.dao.UserDao;
 import com.mobiloitte.com.dto.UserDto;
 import com.mobiloitte.com.model.UserModel;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +27,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEntity<String> insert(UserDto userDto) {
 		UserModel userModel = new UserModel();
 
-		Optional<UserModel> firstname = userDao.findByFirstname(userDto.getFirstname());
-		Optional<UserModel> lastname = userDao.findByLastname(userDto.getLastname());
-		if (!firstname.isPresent() && !lastname.isPresent()) {
-
-			userModel.setFirstname(userDto.getFirstname());
-			userModel.setLastname(userDto.getLastname());
-		}
+		
 		
 		Optional<UserModel> user=userDao.findByUsername(userDto.getUsername());
 		
@@ -42,6 +38,16 @@ public class UserServiceImpl implements UserService {
 		else
 		{
 			return new ResponseEntity<>("Username Already Exists...",HttpStatus.OK);
+		}
+		
+		Optional<UserModel> pass=userDao.findByPassword(userDto.getPassword());
+		if(!pass.isPresent())
+		{
+			userModel.setPassword(userDto.getPassword());
+		}
+		else
+		{
+			return new ResponseEntity<>("Password Already Exixts..",HttpStatus.OK);
 		}
 		
 		Optional<UserModel> mobile=userDao.findByMobnumber(userDto.getMobnumber());
@@ -56,22 +62,30 @@ public class UserServiceImpl implements UserService {
 
 		Optional<UserModel> email = userDao.findByEmailadd(userDto.getEmailadd());
 		if (!email.isPresent()) {
+			userModel.setFirstname(userDto.getFirstname());
+			userModel.setLastname(userDto.getLastname());
+		
 			userModel.setUserdob(userDto.getUserdob());
 			userModel.setEmailadd(userDto.getEmailadd());
 			userModel.setPassword(userDto.getPassword());
 			userModel.setUsername(userDto.getUsername());
 			userDao.save(userModel);
-			return new ResponseEntity<>("Successfully Registered", HttpStatus.OK);
+			return new ResponseEntity<>("201 Account Created", HttpStatus.CREATED);
 		} else {
 
-			return new ResponseEntity<>("Email Already Registered...", HttpStatus.OK);
+			return new ResponseEntity<>("Email Already Registered.", HttpStatus.OK);
 		}
 		
 	}
 
 	@Override
-	public List<UserModel> allData() {
-		return userDao.findAll();
+	public ResponseEntity<List> allData() {
+		List<UserModel> list= userDao.findAll();
+		if(!list.isEmpty())
+		return new ResponseEntity<>(list,HttpStatus.OK);
+		else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@Override
@@ -93,12 +107,13 @@ public class UserServiceImpl implements UserService {
 			UserModel userModel = userDao.getById(user_id);
 			userModel.setFirstname(userDto.getFirstname());
 			userModel.setLastname(userDto.getLastname());
+			userModel.setMobnumber(userDto.getMobnumber());
 			userModel.setUserdob(userDto.getUserdob());
 			userDao.save(userModel);
 			message = new ResponseEntity<>("Updated Successfully", HttpStatus.OK);
 		} else {
 
-			message = new ResponseEntity<>("Not found", HttpStatus.OK);
+			message = new ResponseEntity<>("404 Not found", HttpStatus.NOT_FOUND);
 		}
 		return message;
 	}
@@ -111,6 +126,19 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Optional<UserModel> getByLastname(String lastname) {
 		return userDao.findByLastname(lastname);
+	}
+
+	@Override
+	public ResponseEntity<String> deleteUser(Long user_id) {
+
+		userDao.deleteById(user_id);
+		return new ResponseEntity<>("200 User Deleted Successfully.......!",HttpStatus.OK);
+	}
+
+	@Override
+	public List getemailpassword() {
+
+		return userDao.getemails();
 	}
 
 }

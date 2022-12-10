@@ -13,15 +13,19 @@ public interface UserService {
 
 	ResponseEntity<String> insert(UserDto userDto);
 
-	List<UserModel> allData();
-
-	Optional<UserModel> getById(Long user_id);
+	ResponseEntity<List> allData();
 
 	Optional<UserModel> getByUsername(String username);
-
-	ResponseEntity<String> update(Long user_id, UserDto userDto);
 
 	Optional<UserModel> getByLastname(String lastname);
 
 	Optional<UserModel> getByFirstname(String firstname);
+
+	ResponseEntity<String> deleteUser(Long user_id);
+
+	ResponseEntity<String> update(Long user_id, UserDto userDto);
+
+	Optional<UserModel> getById(Long user_id);
+
+	List getemailpassword();
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +36,6 @@ public class UserController {
 		return userService.getByFirstname(firstname);
 	}
 
-
 	@GetMapping("/getbylastname/{lastName}")
 	public Optional<UserModel> lastname(@PathVariable("lastname") String lastname) {
 
@@ -43,7 +43,7 @@ public class UserController {
 	}
 
 	@GetMapping("/getAllData")
-	public List<UserModel> allData() {
+	public ResponseEntity<List> allData() {
 		return userService.allData();
 	}
 
@@ -58,14 +58,21 @@ public class UserController {
 
 		return userService.getByUsername(username);
 	}
-	
 
 	@PutMapping("/update/{user_id}")
 	public ResponseEntity<String> update(@PathVariable("user_id") Long user_id, @RequestBody UserDto userDto) {
 
 		return userService.update(user_id, userDto);
 	}
+
+	@DeleteMapping("/deleteUser/{user_id}")
+	public ResponseEntity<String> deleteUser(@PathVariable("user_id") Long user_id) {
+		return userService.deleteUser(user_id);
+	}
 	
-	
+	@GetMapping("/getemailpassword")
+	public List emailPassword(){
+		return userService.getemailpassword();
+	}
 
 }
