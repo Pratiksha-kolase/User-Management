@@ -1,10 +1,15 @@
 package com.mobiloitte.com.model;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table
@@ -13,7 +18,8 @@ public class UserModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long user_id;
-	private String userdob;
+    @JsonFormat(pattern="yyyy-MM-dd")
+	private LocalDate userdob;
 	private String emailadd;
 	private String firstname;
 	private String lastname;
@@ -29,11 +35,11 @@ public class UserModel {
 		this.user_id = user_id;
 	}
 
-	public String getUserdob() {
+	public LocalDate getUserdob() {
 		return userdob;
 	}
 
-	public void setUserdob(String userdob) {
+	public void setUserdob(LocalDate userdob) {
 		this.userdob = userdob;
 	}
 

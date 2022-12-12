@@ -1,9 +1,12 @@
 package com.mobiloitte.com.dto;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class UserDto {
 
 	   private Long user_id;
-		private String userdob;
+		private LocalDate userdob;
 		private String emailadd;
 		private String firstname;
 		private String lastname;
@@ -16,10 +19,10 @@ public class UserDto {
 		public void setUser_id(Long user_id) {
 			this.user_id = user_id;
 		}
-		public String getUserdob() {
+		public LocalDate getUserdob() {
 			return userdob;
 		}
-		public void setUserdob(String userdob) {
+		public void setUserdob(LocalDate userdob) {
 			this.userdob = userdob;
 		}
 		public String getEmailadd() {
